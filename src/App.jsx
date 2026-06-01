@@ -4,6 +4,7 @@ import { Routes, Route, Link } from "react-router-dom";
 function HomePage() {
   const [countries, setCountries] = useState([]);
   const [query, setQuery] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("All");
 
   useEffect(() => {
     fetch(
@@ -14,15 +15,53 @@ function HomePage() {
       .catch((error) => console.log(error));
   }, []);
 
-  const filteredCountries = countries.filter((country) =>
-        country.name.common.toLowerCase().includes(query.toLowerCase())
-);
+ const filteredCountries = countries.filter((country) => {
+  const matchesSearch = country.name.common
+    .toLowerCase()
+    .includes(query.toLowerCase());
+
+  const matchesRegion =
+    selectedRegion === "All" ||
+    country.region === selectedRegion;
+
+  return matchesSearch && matchesRegion;
+});
 
   return (
     <>
       <h2>Alla länder</h2>
 
       <label htmlFor="search">Sök efter land</label>
+      <div>
+
+  <button onClick={() => setSelectedRegion("All")}>
+    All
+  </button>
+
+  <button onClick={() => setSelectedRegion("Africa")}>
+    Africa
+  </button>
+
+  <button onClick={() => setSelectedRegion("Americas")}>
+    Americas
+  </button>
+
+  <button onClick={() => setSelectedRegion("Asia")}>
+    Asia
+  </button>
+
+  <button onClick={() => setSelectedRegion("Europe")}>
+    Europe
+  </button>
+
+  <button onClick={() => setSelectedRegion("Oceania")}>
+    Oceania
+  </button>
+
+  <button onClick={() => setSelectedRegion("Antarctic")}>
+    Antarctic
+  </button>
+</div>
 <input
   id="search"
   type="text"
