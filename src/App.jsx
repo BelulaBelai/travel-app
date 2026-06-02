@@ -171,6 +171,7 @@ function CountryPage() {
 
   const [country, setCountry] = useState(null);
   const [weather, setWeather] = useState(null);
+  const [wikiInfo, setWikiInfo] = useState(null);
 
   // Hämtar information om det valda landet
   useEffect(() => {
@@ -209,6 +210,18 @@ useEffect(() => {
     .catch((error) => console.log(error));
 }, [country]);
 
+// Hämtar kort introduktion från Wikipedia
+useEffect(() => {
+  if (!country) return;
+
+  fetch(
+    `https://en.wikipedia.org/api/rest_v1/page/summary/${country.name.common}`
+  )
+    .then((response) => response.json())
+    .then((data) => setWikiInfo(data))
+    .catch((error) => console.log(error));
+}, [country]);
+
   if (!country) {
     return <p>Laddar landinformation...</p>;
   }
@@ -238,7 +251,7 @@ useEffect(() => {
 
       <p>
         <strong>Befolkning:</strong>{" "}
-        {country.population > 0 ? country.population.toLocaleString() : "Saknas"}
+        {country.population > 0 ? country.population.toLocaleString() : "Befolkningsdata saknas"}
       </p>
 
       <p>
@@ -263,6 +276,28 @@ useEffect(() => {
     ? `${weather.current.temperature_2m} °C`
     : "Väderdata saknas"}
 </p>
+
+<section>
+  <h3>Kort introduktion</h3>
+
+  {wikiInfo?.extract ? (
+    <>
+      <p>{wikiInfo.extract}</p>
+      <p>
+        Källa:{" "}
+        <a
+          href={wikiInfo.content_urls.desktop.page}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Wikipedia
+        </a>
+      </p>
+    </>
+  ) : (
+    <p>Ingen introduktion hittades.</p>
+  )}
+</section>
 
       <Link to="/">Tillbaka till startsidan</Link>
     </>
