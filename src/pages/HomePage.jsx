@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 function HomePage() {
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
-const [error, setError] = useState(null);
-  const [query, setQuery] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState("All");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState(null);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get("query") || "");
+  const [selectedRegion, setSelectedRegion] = useState(
+  searchParams.get("region") || "All"
+);
+  const [currentPage, setCurrentPage] = useState(
+  Number(searchParams.get("page")) || 1
+);
+ 
 
   // Hämtar alla länder från REST Countries API
 useEffect(() => {
@@ -31,6 +38,17 @@ useEffect(() => {
     })
     .finally(() => setLoading(false));
 }, []);
+
+// Uppdaterar URL-parametrar när sökning, region eller sida ändras
+useEffect(() => {
+  const params = {};
+
+  if (query) params.query = query;
+  if (selectedRegion !== "All") params.region = selectedRegion;
+  if (currentPage !== 1) params.page = currentPage.toString();
+
+  setSearchParams(params);
+}, [query, selectedRegion, currentPage, setSearchParams]);
 
   // Filtrerar länder baserat på sökning och vald region
   const filteredCountries = countries.filter((country) => {
