@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useParams } from "react-router-dom";
 
 function HomePage() {
   const [countries, setCountries] = useState([]);
@@ -167,9 +167,68 @@ function HomePage() {
 }
 
 function CountryPage() {
+  const { name } = useParams();
+
+  const [country, setCountry] = useState(null);
+
+  // Hämtar information om det valda landet
+  useEffect(() => {
+    fetch(
+      `https://restcountries.com/v3.1/name/${name}?fields=name,region,subregion,capital,flags,population,languages,currencies`
+    )
+      .then((response) => response.json())
+      .then((data) => setCountry(data[0]))
+      .catch((error) => console.log(error));
+  }, [name]);
+
+  if (!country) {
+    return <p>Laddar landinformation...</p>;
+  }
+
   return (
     <>
-      <h2>Detaljsida för land</h2>
+      <h2>{country.name.common}</h2>
+
+      <img
+        src={country.flags.png}
+        alt={`Flag of ${country.name.common}`}
+        width="200"
+      />
+
+      <p>
+        <strong>Region:</strong> {country.region}
+      </p>
+
+      <p>
+        <strong>Subregion:</strong> {country.subregion}
+      </p>
+
+      <p>
+        <strong>Huvudstad:</strong>{" "}
+        {country.capital ? country.capital[0] : "Saknas"}
+      </p>
+
+      <p>
+        <strong>Befolkning:</strong>{" "}
+        {country.population.toLocaleString()}
+      </p>
+
+      <p>
+  <strong>Språk:</strong>{" "}
+  {country.languages
+    ? Object.values(country.languages).join(", ")
+    : "Saknas"}
+</p>
+
+<p>
+  <strong>Valuta:</strong>{" "}
+  {country.currencies
+    ? Object.values(country.currencies)
+        .map((currency) => currency.name)
+        .join(", ")
+    : "Saknas"}
+</p>
+
       <Link to="/">Tillbaka till startsidan</Link>
     </>
   );
