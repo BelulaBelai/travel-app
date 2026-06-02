@@ -1,21 +1,37 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, Link, useParams } from "react-router-dom";
+import "./App.css";
 
 function HomePage() {
   const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
 
   // Hämtar alla länder från REST Countries API
-  useEffect(() => {
-    fetch(
-      "https://restcountries.com/v3.1/all?fields=name,region,capital,flags"
-    )
-      .then((response) => response.json())
-      .then((data) => setCountries(data))
-      .catch((error) => console.log(error));
-  }, []);
+useEffect(() => {
+  setLoading(true);
+  setError(null);
+
+  fetch(
+    "https://restcountries.com/v3.1/all?fields=name,region,capital,flags"
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Kunde inte hämta länder");
+      }
+
+      return response.json();
+    })
+    .then((data) => setCountries(data))
+    .catch((error) => {
+      console.log(error);
+      setError("Något gick fel när länderna skulle hämtas.");
+    })
+    .finally(() => setLoading(false));
+}, []);
 
   // Filtrerar länder baserat på sökning och vald region
   const filteredCountries = countries.filter((country) => {
@@ -36,6 +52,36 @@ function HomePage() {
   const endIndex = startIndex + countriesPerPage;
   const paginatedCountries = filteredCountries.slice(startIndex, endIndex);
   const totalPages = Math.ceil(filteredCountries.length / countriesPerPage);
+
+  if (loading) {
+  return (
+    <div className="loading-container">
+      <span className="loader"></span>
+    </div>
+  );
+}
+
+if (error) {
+  return (
+    <div>
+      <p>{error}</p>
+      <button onClick={() => window.location.reload()}>
+        Försök igen
+      </button>
+    </div>
+  );
+}
+
+// if (true) {
+//   return (
+//     <div>
+//       <p>Testfel</p>
+//       <button onClick={() => window.location.reload()}>
+//         Försök igen
+//       </button>
+//     </div>
+//   );
+// }
 
   return (
     <>
@@ -228,9 +274,12 @@ useEffect(() => {
 }, [country]);
 
   if (!country) {
-    return <p>Laddar landinformation...</p>;
-  }
-
+  return (
+    <div className="loading-container">
+      <span className="loader"></span>
+    </div>
+  );
+}
   return (
     <>
       <h2>{country.name.common}</h2>
