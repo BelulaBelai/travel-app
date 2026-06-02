@@ -8,6 +8,7 @@ function CountryPage() {
   const [country, setCountry] = useState(null);
   const [weather, setWeather] = useState(null);
   const [wikiInfo, setWikiInfo] = useState(null);
+  const [photos, setPhotos] = useState([]);
 
   // Hämtar information om det valda landet
   useEffect(() => {
@@ -55,6 +56,23 @@ useEffect(() => {
   )
     .then((response) => response.json())
     .then((data) => setWikiInfo(data))
+    .catch((error) => console.log(error));
+}, [country]);
+
+// Hämtar bilder från Pexels
+useEffect(() => {
+  if (!country) return;
+
+  fetch(
+    `https://api.pexels.com/v1/search?query=${country.name.common}&per_page=3`,
+    {
+      headers: {
+        Authorization: import.meta.env.VITE_PEXELS_API_KEY,
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => setPhotos(data.photos || []))
     .catch((error) => console.log(error));
 }, [country]);
 
@@ -136,6 +154,20 @@ useEffect(() => {
   ) : (
     <p>Ingen introduktion hittades.</p>
   )}
+</section>
+
+<section>
+  <h3>Bilder</h3>
+
+  <div className="country-gallery">
+    {photos.map((photo) => (
+      <img
+        key={photo.id}
+        src={photo.src.medium}
+        alt={photo.alt || `Bild från ${country.name.common}`}
+      />
+    ))}
+  </div>
 </section>
 
       <Link to="/">Tillbaka till startsidan</Link>
