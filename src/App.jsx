@@ -120,6 +120,11 @@ function HomePage() {
         </button>
       </div>
 
+        {/* Visas om inga länder matchar sökningen eller regionfiltret */}
+{filteredCountries.length === 0 && (
+  <p>Inga länder matchar dina kriterier.</p>
+)}
+
       {paginatedCountries.map((country) => (
         <div key={country.name.common}>
           <img
