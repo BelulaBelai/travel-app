@@ -88,7 +88,7 @@ if (!country) {
 return (
   <article className="country-detail">
     <Link className="back-link" to="/">
-      ← Tillbaka till startsidan
+      ← Back to homepage
     </Link>
 
     <section className="country-detail-card">
@@ -110,50 +110,50 @@ return (
         </p>
 
         <p>
-          <strong>Huvudstad:</strong>{" "}
-          {country.capital ? country.capital[0] : "Saknas"}
+          <strong>Capital city:</strong>{" "}
+          {country.capital ? country.capital[0] : "Not available"}
         </p>
 
         <p>
-          <strong>Befolkning:</strong>{" "}
+          <strong>Population:</strong>{" "}
           {country.population > 0
             ? country.population.toLocaleString()
-            : "Befolkningsdata saknas"}
+            : "Not available"}
         </p>
 
         <p>
-          <strong>Språk:</strong>{" "}
+          <strong>Language:</strong>{" "}
           {country.languages
             ? Object.values(country.languages).join(", ")
-            : "Saknas"}
+            : "Not available"}
         </p>
 
         <p>
-          <strong>Valuta:</strong>{" "}
+          <strong>Currency:</strong>{" "}
           {country.currencies
             ? Object.values(country.currencies)
                 .map((currency) => currency.name)
                 .join(", ")
-            : "Saknas"}
+            : "Not available"}
         </p>
 
         <p>
-          <strong>Temperatur:</strong>{" "}
+          <strong>Temperature:</strong>{" "}
           {weather?.current?.temperature_2m !== undefined
             ? `${weather.current.temperature_2m} °C`
-            : "Väderdata saknas"}
+            : "Not available"}
         </p>
       </div>
     </section>
 
     <section className="detail-section">
-      <h3>Kort introduktion</h3>
+      <h3>About {country.name.common}</h3>
 
       {wikiInfo?.extract ? (
         <>
           <p>{wikiInfo.extract}</p>
           <p>
-            Källa:{" "}
+            Source:{" "}
             <a
               href={wikiInfo.content_urls.desktop.page}
               target="_blank"
@@ -164,19 +164,19 @@ return (
           </p>
         </>
       ) : (
-        <p>Ingen introduktion hittades.</p>
+        <p>No information available.</p>
       )}
     </section>
 
     <section className="detail-section">
-      <h3>Bilder</h3>
+      <h3>Explore {country.name.common}</h3>
 
       <div className="country-gallery">
         {photos.map((photo) => (
           <img
             key={photo.id}
             src={photo.src.medium}
-            alt={photo.alt || `Bild från ${country.name.common}`}
+            alt={photo.alt || `Picture from ${country.name.common}`}
           />
         ))}
       </div>

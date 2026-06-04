@@ -278,7 +278,10 @@ main:has(.country-detail) {
   background: #ffffff;
   border: 1px solid #dbe4ef;
   border-radius: 20px;
+  padding-top: 2rem;
   padding: 2rem;
+  margin-bottom: 1rem;
+
   display: grid;
   gap: 2rem;
   align-items: center;
@@ -288,7 +291,7 @@ main:has(.country-detail) {
   width: 100%;
   max-width: 420px;
   border-radius: 12px;
-  border: 1px solid #dbe4ef;
+  border: 1px solid #91989f;
 }
 
 .country-detail-info h2 {

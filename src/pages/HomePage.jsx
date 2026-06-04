@@ -26,7 +26,7 @@ useEffect(() => {
   )
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Kunde inte hämta länder");
+        throw new Error("Unable to load countries.");
       }
 
       return response.json();
@@ -34,7 +34,7 @@ useEffect(() => {
     .then((data) => setCountries(data))
     .catch((error) => {
       console.log(error);
-      setError("Något gick fel när länderna skulle hämtas.");
+      setError("Something went wrong while loading the countries.");
     })
     .finally(() => setLoading(false));
 }, []);
@@ -105,7 +105,7 @@ if (error) {
 
     <section className="home-controls">
       <div className="search-section">
-      <label htmlFor="search">Sök efter land</label>
+      <label htmlFor="search">Find your dream destination</label>
       <input
         id="search"
         type="text"
@@ -115,12 +115,12 @@ if (error) {
           setQuery(event.target.value);
           setCurrentPage(1);
         }}
-        placeholder="Sök land..."
+        placeholder="Search country..."
       />
       </div>
 
       {/* Regionfilter */}
-      <section className="filter-section" aria-label="Filtrera länder efter region">
+      <section className="filter-section" aria-label="Filter countries by region">
         <button
   className={selectedRegion === "All" ? "active-region" : ""}
   onClick={() => {
@@ -212,33 +212,33 @@ if (error) {
           <p>Region: {country.region}</p>
 
           <p>
-            Huvudstad: {country.capital ? country.capital[0] : "Saknas"}
+            Capital city: {country.capital ? country.capital[0] : "Not available"}
           </p>
 
-          <Link to={`/country/${country.name.common}`}>Visa land</Link>
+          <Link to={`/country/${country.name.common}`}>Show country</Link>
 
           </li>
   ))}
 </ul>
 
       
-      <nav className="pagination" aria-label="Paginering">
+      <nav className="pagination" aria-label="Pagination">
         <button
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          Föregående
+          Previous
         </button>
 
         <span>
-          Sida {currentPage} av {totalPages}
+          Page {currentPage} of {totalPages}
         </span>
 
         <button
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage === totalPages || totalPages === 0}
         >
-          Nästa
+          Next
         </button>
       </nav>
     </>
