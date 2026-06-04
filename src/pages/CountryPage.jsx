@@ -64,7 +64,7 @@ useEffect(() => {
   if (!country) return;
 
   fetch(
-    `https://api.pexels.com/v1/search?query=${country.name.common}&per_page=3`,
+    `https://api.pexels.com/v1/search?query=${country.name.common}&per_page=4`,
     {
       headers: {
         Authorization: import.meta.env.VITE_PEXELS_API_KEY,
@@ -76,103 +76,113 @@ useEffect(() => {
     .catch((error) => console.log(error));
 }, [country]);
 
-  if (!country) {
+
+if (!country) {
   return (
     <div className="loading-container">
       <span className="loader"></span>
     </div>
   );
 }
-  return (
-    <>
-      <h2>{country.name.common}</h2>
 
+return (
+  <article className="country-detail">
+    <Link className="back-link" to="/">
+      ← Tillbaka till startsidan
+    </Link>
+
+    <section className="country-detail-card">
       <img
+        className="detail-flag"
         src={country.flags.png}
         alt={`Flag of ${country.name.common}`}
-        width="200"
       />
 
-      <p>
-        <strong>Region:</strong> {country.region}
-      </p>
+      <div className="country-detail-info">
+        <h2>{country.name.common}</h2>
 
-      <p>
-        <strong>Subregion:</strong> {country.subregion}
-      </p>
+        <p>
+          <strong>Region:</strong> {country.region}
+        </p>
 
-      <p>
-        <strong>Huvudstad:</strong>{" "}
-        {country.capital ? country.capital[0] : "Saknas"}
-      </p>
+        <p>
+          <strong>Subregion:</strong> {country.subregion}
+        </p>
 
-      <p>
-        <strong>Befolkning:</strong>{" "}
-        {country.population > 0 ? country.population.toLocaleString() : "Befolkningsdata saknas"}
-      </p>
+        <p>
+          <strong>Huvudstad:</strong>{" "}
+          {country.capital ? country.capital[0] : "Saknas"}
+        </p>
 
-      <p>
-  <strong>Språk:</strong>{" "}
-  {country.languages
-    ? Object.values(country.languages).join(", ")
-    : "Saknas"}
-</p>
+        <p>
+          <strong>Befolkning:</strong>{" "}
+          {country.population > 0
+            ? country.population.toLocaleString()
+            : "Befolkningsdata saknas"}
+        </p>
 
-<p>
-  <strong>Valuta:</strong>{" "}
-  {country.currencies
-    ? Object.values(country.currencies)
-        .map((currency) => currency.name)
-        .join(", ")
-    : "Saknas"}
-</p>
+        <p>
+          <strong>Språk:</strong>{" "}
+          {country.languages
+            ? Object.values(country.languages).join(", ")
+            : "Saknas"}
+        </p>
 
-<p>
-  <strong>Temperatur:</strong>{" "}
-  {weather?.current?.temperature_2m !== undefined
-    ? `${weather.current.temperature_2m} °C`
-    : "Väderdata saknas"}
-</p>
+        <p>
+          <strong>Valuta:</strong>{" "}
+          {country.currencies
+            ? Object.values(country.currencies)
+                .map((currency) => currency.name)
+                .join(", ")
+            : "Saknas"}
+        </p>
 
-<section>
-  <h3>Kort introduktion</h3>
+        <p>
+          <strong>Temperatur:</strong>{" "}
+          {weather?.current?.temperature_2m !== undefined
+            ? `${weather.current.temperature_2m} °C`
+            : "Väderdata saknas"}
+        </p>
+      </div>
+    </section>
 
-  {wikiInfo?.extract ? (
-    <>
-      <p>{wikiInfo.extract}</p>
-      <p>
-        Källa:{" "}
-        <a
-          href={wikiInfo.content_urls.desktop.page}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Wikipedia
-        </a>
-      </p>
-    </>
-  ) : (
-    <p>Ingen introduktion hittades.</p>
-  )}
-</section>
+    <section className="detail-section">
+      <h3>Kort introduktion</h3>
 
-<section>
-  <h3>Bilder</h3>
+      {wikiInfo?.extract ? (
+        <>
+          <p>{wikiInfo.extract}</p>
+          <p>
+            Källa:{" "}
+            <a
+              href={wikiInfo.content_urls.desktop.page}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Wikipedia
+            </a>
+          </p>
+        </>
+      ) : (
+        <p>Ingen introduktion hittades.</p>
+      )}
+    </section>
 
-  <div className="country-gallery">
-    {photos.map((photo) => (
-      <img
-        key={photo.id}
-        src={photo.src.medium}
-        alt={photo.alt || `Bild från ${country.name.common}`}
-      />
-    ))}
-  </div>
-</section>
+    <section className="detail-section">
+      <h3>Bilder</h3>
 
-      <Link to="/">Tillbaka till startsidan</Link>
-    </>
-  );
+      <div className="country-gallery">
+        {photos.map((photo) => (
+          <img
+            key={photo.id}
+            src={photo.src.medium}
+            alt={photo.alt || `Bild från ${country.name.common}`}
+          />
+        ))}
+      </div>
+    </section>
+  </article>
+);
 }
 
 export default CountryPage;

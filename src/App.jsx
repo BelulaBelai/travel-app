@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <header>
-        <h1>Reseapp</h1>
+        <h1>✈️ Country Explorer</h1>
       </header>
 
       <main>

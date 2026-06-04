@@ -62,7 +62,7 @@ useEffect(() => {
     return matchesSearch && matchesRegion;
   });
 
-  const countriesPerPage = 10;
+  const countriesPerPage = 12;
 
   // Räknar ut vilka länder som ska visas på aktuell sida
   const startIndex = (currentPage - 1) * countriesPerPage;
@@ -102,8 +102,9 @@ if (error) {
 
   return (
     <>
-      <h2>Alla länder</h2>
 
+    <section className="home-controls">
+      <div className="search-section">
       <label htmlFor="search">Sök efter land</label>
       <input
         id="search"
@@ -116,85 +117,95 @@ if (error) {
         }}
         placeholder="Sök land..."
       />
+      </div>
 
       {/* Regionfilter */}
-      <div>
+      <section className="filter-section" aria-label="Filtrera länder efter region">
         <button
-          onClick={() => {
-            setSelectedRegion("All");
-            setCurrentPage(1);
-          }}
-        >
-          All
-        </button>
+  className={selectedRegion === "All" ? "active-region" : ""}
+  onClick={() => {
+    setSelectedRegion("All");
+    setCurrentPage(1);
+  }}
+>
+  All
+</button>
 
-        <button
-          onClick={() => {
-            setSelectedRegion("Africa");
-            setCurrentPage(1);
-          }}
-        >
-          Africa
-        </button>
+<button
+  className={selectedRegion === "Africa" ? "active-region" : ""}
+  onClick={() => {
+    setSelectedRegion("Africa");
+    setCurrentPage(1);
+  }}
+>
+  Africa
+</button>
 
-        <button
-          onClick={() => {
-            setSelectedRegion("Americas");
-            setCurrentPage(1);
-          }}
-        >
-          Americas
-        </button>
+<button
+  className={selectedRegion === "Americas" ? "active-region" : ""}
+  onClick={() => {
+    setSelectedRegion("Americas");
+    setCurrentPage(1);
+  }}
+>
+  Americas
+</button>
 
-        <button
-          onClick={() => {
-            setSelectedRegion("Asia");
-            setCurrentPage(1);
-          }}
-        >
-          Asia
-        </button>
+<button
+  className={selectedRegion === "Asia" ? "active-region" : ""}
+  onClick={() => {
+    setSelectedRegion("Asia");
+    setCurrentPage(1);
+  }}
+>
+  Asia
+</button>
 
-        <button
-          onClick={() => {
-            setSelectedRegion("Europe");
-            setCurrentPage(1);
-          }}
-        >
-          Europe
-        </button>
+<button
+  className={selectedRegion === "Europe" ? "active-region" : ""}
+  onClick={() => {
+    setSelectedRegion("Europe");
+    setCurrentPage(1);
+  }}
+>
+  Europe
+</button>
 
-        <button
-          onClick={() => {
-            setSelectedRegion("Oceania");
-            setCurrentPage(1);
-          }}
-        >
-          Oceania
-        </button>
+<button
+  className={selectedRegion === "Oceania" ? "active-region" : ""}
+  onClick={() => {
+    setSelectedRegion("Oceania");
+    setCurrentPage(1);
+  }}
+>
+  Oceania
+</button>
 
-        <button
-          onClick={() => {
-            setSelectedRegion("Antarctic");
-            setCurrentPage(1);
-          }}
-        >
-          Antarctic
-        </button>
-      </div>
+<button
+  className={selectedRegion === "Antarctic" ? "active-region" : ""}
+  onClick={() => {
+    setSelectedRegion("Antarctic");
+    setCurrentPage(1);
+  }}
+>
+  Antarctic
+</button>
+      </section>
+      </section>
 
         {/* Visas om inga länder matchar sökningen eller regionfiltret */}
 {filteredCountries.length === 0 && (
   <p>Inga länder matchar dina kriterier.</p>
 )}
 
-      {paginatedCountries.map((country) => (
-        <div key={country.name.common}>
-          <img
-            src={country.flags.png}
-            alt={`Flag of ${country.name.common}`}
-            width="100"
-          />
+      <ul className="country-list">
+  {paginatedCountries.map((country) => (
+    <li key={country.name.common} className="country-card">
+      <img
+        src={country.flags.png}
+        alt={`Flag of ${country.name.common}`}
+        width="100"
+      />
 
           <h3>{country.name.common}</h3>
 
@@ -206,12 +217,12 @@ if (error) {
 
           <Link to={`/country/${country.name.common}`}>Visa land</Link>
 
-          <hr />
-        </div>
-      ))}
+          </li>
+  ))}
+</ul>
 
       
-      <nav>
+      <nav className="pagination" aria-label="Paginering">
         <button
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
