@@ -81,9 +81,9 @@ useEffect(() => {
 if (error) {
   return (
     <div>
-      <p>{error}</p>
-      <button onClick={() => window.location.reload()}>
-        Försök igen
+      <p className="error-message">{error}</p>
+      <button className="retry-button" onClick={() => window.location.reload()}>
+        Try again
       </button>
     </div>
   );
@@ -92,9 +92,9 @@ if (error) {
 // if (true) {
 //   return (
 //     <div>
-//       <p>Testfel</p>
-//       <button onClick={() => window.location.reload()}>
-//         Försök igen
+//       <p className="error-message">Testfel</p>
+//       <button className="retry-button" onClick={() => window.location.reload()}>
+//         Try again
 //       </button>
 //     </div>
 //   );
@@ -195,7 +195,7 @@ if (error) {
 
         {/* Visas om inga länder matchar sökningen eller regionfiltret */}
 {filteredCountries.length === 0 && (
-  <p>Inga länder matchar dina kriterier.</p>
+  <p className="no-results"> No countries match your search.</p>
 )}
 
       <ul className="country-list">
@@ -230,8 +230,9 @@ if (error) {
           Previous
         </button>
 
+
         <span>
-          Page {currentPage} of {totalPages}
+         Page {filteredCountries.length === 0 ? 0 : currentPage} of {totalPages}
         </span>
 
         <button

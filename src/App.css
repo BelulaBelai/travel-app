@@ -72,6 +72,31 @@ main {
   background-color: #ffffff;
 }
 
+.no-results {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #314678;
+  margin-top: 2rem;
+}
+
+.error-message {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 700;
+  color: #991b1b;
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+}
+
+.retry-button {
+  display: block;
+  margin: 1rem auto 0;
+}
+
 .filter-section {
   display: flex;
   flex-wrap: wrap;
