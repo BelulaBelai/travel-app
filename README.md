@@ -1,16 +1,44 @@
-# React + Vite
+# Country Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+En React-applikation där användaren kan söka efter länder, filtrera efter region, se basfakta om varje land samt visa aktuellt väder, bilder och en kort introduktion om landet.
 
-Currently, two official plugins are available:
+## Köra projektet lokalt
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Installera beroenden:
 
-## React Compiler
+```bash
+npm install
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Starta utvecklingsservern:
 
-## Expanding the ESLint configuration
+```bash
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Skapa en `.env`-fil i projektets rotmapp och lägg till nödvändiga API-nycklar:
+
+```env
+VITE_PEXELS_API_KEY=DIN_API_NYCKEL
+```
+
+## Datakällor
+* REST Countries API – https://restcountries.com/
+* Pexels API – https://www.pexels.com/api/
+* Open-Meteo API – https://open-meteo.com/
+* Wikipedia API – https://www.wikipedia.org/
+  
+## Tekniker
+- React
+- React Router
+- Vite
+- JavaScript
+- HTML
+- CSS
+- Git & GitHub
+- Vercel
+
+## Deployment
+Applikationen är deployad via Vercel:
+https://travel-app-plum-two.vercel.app/ 
+
