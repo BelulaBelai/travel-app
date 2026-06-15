@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-
+import { formatCountry } from "../utils/formatCountry";
 
 function CountryPage() {
   const { name } = useParams();
@@ -10,15 +10,27 @@ function CountryPage() {
   const [wikiInfo, setWikiInfo] = useState(null);
   const [photos, setPhotos] = useState([]);
 
-  // Hämtar information om det valda landet
   useEffect(() => {
-    fetch(
-      `https://restcountries.com/v3.1/name/${name}?fields=name,region,subregion,capital,flags,population,languages,currencies,capitalInfo,latlng`
-    )
-      .then((response) => response.json())
-      .then((data) => setCountry(data[0]))
-      .catch((error) => console.log(error));
-  }, [name]);
+  fetch(
+    `https://api.restcountries.com/countries/v5/names.common/${name}?api-key=${import.meta.env.VITE_RESTCOUNTRIES_API_KEY}`
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Could not load country.");
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      const countryData = data.data.objects[0];
+      const formattedCountry = formatCountry(countryData);
+
+      setCountry(formattedCountry);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}, [name]);
 
   // Hämtar aktuellt väder för landets huvudstad
 useEffect(() => {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { formatCountry } from "../utils/formatCountry";
 
 function HomePage() {
   const [countries, setCountries] = useState([]);
@@ -14,30 +15,50 @@ function HomePage() {
   const [currentPage, setCurrentPage] = useState(
   Number(searchParams.get("page")) || 1
 );
- 
 
-  // Hämtar alla länder från REST Countries API
+// Hämtar alla länder från REST Countries API
 useEffect(() => {
   setLoading(true);
   setError(null);
 
-  fetch(
-    "https://restcountries.com/v3.1/all?fields=name,region,capital,flags"
-  )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Unable to load countries.");
-      }
+  Promise.all([
+    fetch(
+      `https://api.restcountries.com/countries/v5?limit=100&offset=0&api-key=${import.meta.env.VITE_RESTCOUNTRIES_API_KEY}`
+    ),
+    fetch(
+      `https://api.restcountries.com/countries/v5?limit=100&offset=100&api-key=${import.meta.env.VITE_RESTCOUNTRIES_API_KEY}`
+    ),
+    fetch(
+      `https://api.restcountries.com/countries/v5?limit=100&offset=200&api-key=${import.meta.env.VITE_RESTCOUNTRIES_API_KEY}`
+    ),
+  ])
+    .then((responses) => {
+      responses.forEach((response) => {
+        if (!response.ok) {
+          throw new Error("Unable to load countries.");
+        }
+      });
 
-      return response.json();
+      return Promise.all(responses.map((response) => response.json()));
     })
-    .then((data) => setCountries(data))
+    .then((results) => {
+      const allCountries = results.flatMap(
+        (result) => result.data.objects
+      );
+
+      const formattedCountries = allCountries
+  .map((country) => formatCountry(country))
+  .filter((country) => country.flags.png);
+
+      setCountries(formattedCountries);
+    })
     .catch((error) => {
       console.log(error);
       setError("Something went wrong while loading the countries.");
     })
     .finally(() => setLoading(false));
 }, []);
+
 
 // Uppdaterar URL-parametrar när sökning, region eller sida ändras
 useEffect(() => {
@@ -201,11 +222,17 @@ if (error) {
       <ul className="country-list">
   {paginatedCountries.map((country) => (
     <li key={country.name.common} className="country-card">
-      <img
-        src={country.flags.png}
-        alt={`Flag of ${country.name.common}`}
-        width="100"
-      />
+     {country.flags.png ? (
+  <img
+    src={country.flags.png}
+    alt={`Flag of ${country.name.common}`}
+    width="100"
+  />
+) : (
+  <p style={{ color: "red" }}>
+    No flag available
+  </p>
+)}
 
           <h3>{country.name.common}</h3>
 
