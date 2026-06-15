@@ -20,6 +20,7 @@ Skapa en `.env`-fil i projektets rotmapp och lägg till nödvändiga API-nycklar
 
 ```env
 VITE_PEXELS_API_KEY=DIN_API_NYCKEL
+VITE_RESTCOUNTRIES_API_KEY=your_key_here
 ```
 
 ## Datakällor
